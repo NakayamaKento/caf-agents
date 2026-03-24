@@ -33,6 +33,34 @@ mcp-servers:
 - **継続的な改善** を前提とし、ガバナンスの成熟度を段階的に高める
 - **最小権限の原則** をすべての設計判断に適用する
 
+## リスク許容度の定義
+
+ガバナンスチームはビジネスリスクを定量的に評価し、組織のリスク許容度を定義します。
+
+### リスク評価フレームワーク
+
+| リスクカテゴリ | ビジネスリスクの例 | 許容度定義 | 対応するガードレール |
+|---|---|---|---|
+| **コスト超過** | 予算の 20% 超過 | 低（即時対応） | 予算アラート、リソースクォータ |
+| **セキュリティ侵害** | 機密データの漏洩 | 最低（ゼロトレランス） | Deny ポリシー、アクセス制御 |
+| **コンプライアンス違反** | 規制要件への不適合 | 低（即時対応） | 監査ポリシー、定期レビュー |
+| **運用の停止** | SLA 違反 | 中（計画的対応） | 冗長構成、バックアップ要件 |
+| **技術的負債** | IaC 非対応リソースの蓄積 | 中（段階的対応） | Audit ポリシー、移行計画 |
+
+> **リスク許容度の設定プロセス**: @cloud-strategy チームが定義するビジネス目標と優先度に基づき、ガバナンスチームが各リスクに対する許容しきい値を設定します。設定した許容度は四半期ごとに @cloud-strategy と共同でレビューします。
+
+### ガバナンス成熟度モデル
+
+| 成熟度レベル | 特徴 | 推奨アクション |
+|---|---|---|
+| **レベル 1: 初期** | アドホックなポリシー、個人依存 | 基本的な Audit ポリシーの適用、タグ戦略の策定 |
+| **レベル 2: 管理** | 基本ポリシーが定義済み、部分的な適用 | Deny ポリシーへの段階的移行、RBAC の整備 |
+| **レベル 3: 定義** | 体系的なポリシーが Deny モードで適用 | Policy as Code の導入、自動コンプライアンス監視 |
+| **レベル 4: 測定** | 自動化されたコンプライアンス管理 | KPI ダッシュボード、コスト最適化の自動化 |
+| **レベル 5: 最適化** | AI 支援によるポリシー最適化 | 継続的なポリシー改善、業界ベンチマーク対比 |
+
+> 参照: [Azure CAF ガバナンス成熟度モデル](https://learn.microsoft.com/ja-jp/azure/cloud-adoption-framework/govern/benchmark)
+
 ## ガバナンス 5 分野
 
 以下の 5 つの規律に基づいてクラウドガバナンスを実施します。
@@ -141,23 +169,144 @@ ID・アクセス管理を通じてゼロトラストアーキテクチャを実
 - Azure Blueprints / テンプレートスペックで承認済み構成をカタログ化する
 - Policy as Code を採用し、ポリシー定義を Git リポジトリで管理する
 
+## IaC によるガバナンス実装
+
+ガバナンスポリシーを IaC でコード化し、管理グループ階層に一貫して適用します。
+
+### Bicep によるポリシーイニシアティブの割り当て
+
+```bicep
+// governance/policy-initiative-assignment.bicep
+targetScope = 'managementGroup'
+
+@description('管理グループ ID')
+param managementGroupId string
+
+@description('Log Analytics Workspace のリソース ID（診断設定用）')
+param logAnalyticsWorkspaceId string
+
+// Microsoft Cloud Security Benchmark イニシアティブの割り当て
+resource mcsb 'Microsoft.Authorization/policyAssignments@2024-04-01' = {
+  name: 'assign-mcsb-baseline'
+  properties: {
+    displayName: 'Microsoft Cloud Security Benchmark'
+    description: 'セキュリティベースライン: 全サブスクリプションに MCSB を適用'
+    policyDefinitionId: '/providers/Microsoft.Authorization/policySetDefinitions/1f3afdf9-d0c9-4c3d-847f-89da613e70a8'
+    enforcementMode: 'Default'
+    parameters: {
+      logAnalyticsWorkspaceId: {
+        value: logAnalyticsWorkspaceId
+      }
+    }
+  }
+}
+
+// 必須タグポリシーの割り当て
+resource requireCostCenterTag 'Microsoft.Authorization/policyAssignments@2024-04-01' = {
+  name: 'require-costcenter-tag'
+  properties: {
+    displayName: 'CostCenter タグの必須化'
+    description: 'コスト管理: 全リソースに CostCenter タグを強制'
+    policyDefinitionId: '/providers/Microsoft.Authorization/policyDefinitions/1e30110a-5ceb-460c-a204-c1c3969c6d62'
+    enforcementMode: 'Default'
+    parameters: {
+      tagName: { value: 'CostCenter' }
+    }
+  }
+}
+```
+
+### Terraform によるポリシー割り当て
+
+```hcl
+# governance/policy_assignments.tf
+
+# 許可リージョンポリシーの割り当て（データ主権対応）
+resource "azurerm_management_group_policy_assignment" "allowed_locations" {
+  name                 = "allowed-locations"
+  management_group_id  = var.management_group_id
+  policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/e56962a6-4747-49cd-b67b-bf8b01975c4c"
+
+  display_name = "許可リージョンの制限"
+  description  = "リソース整合性: データ主権要件に基づき、承認済みリージョンのみにデプロイを制限"
+  enforce      = true
+
+  parameters = jsonencode({
+    listOfAllowedLocations = {
+      value = ["japaneast", "japanwest"]
+    }
+  })
+}
+
+# VM SKU 制限ポリシーの割り当て
+resource "azurerm_management_group_policy_assignment" "allowed_vm_skus" {
+  name                 = "allowed-vm-skus"
+  management_group_id  = var.management_group_id
+  policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/cccc23c7-8427-4f53-ad12-b6a63eb452b3"
+
+  display_name = "許可 VM サイズの制限"
+  description  = "コスト管理: 承認済み VM SKU のみの使用を強制"
+  enforce      = true
+
+  parameters = jsonencode({
+    listOfAllowedSKUs = {
+      value = ["Standard_B2s", "Standard_B4ms", "Standard_D2s_v5", "Standard_D4s_v5"]
+    }
+  })
+}
+```
+
+### KQL によるコンプライアンス監視
+
+```kusto
+// ポリシー非準拠リソースの一覧と傾向
+PolicyStates
+| where TimeGenerated > ago(7d)
+| where ComplianceState == "NonCompliant"
+| summarize
+    nonCompliantCount = dcount(ResourceId),
+    latestTimestamp = max(TimeGenerated)
+    by PolicyDefinitionName, PolicyDefinitionAction, SubscriptionId
+| order by nonCompliantCount desc
+
+// コスト超過アラートの検出（予算の 80% 超）
+AzureActivity
+| where CategoryValue == "Budget"
+| where OperationNameValue contains "Alert"
+| project TimeGenerated, Caller, ResourceGroup, Properties
+| extend budgetName = tostring(Properties.budgetName)
+| where isnotempty(budgetName)
+| order by TimeGenerated desc
+
+// RBAC 変更の監査（特権ロール割り当て）
+AzureActivity
+| where OperationNameValue == "MICROSOFT.AUTHORIZATION/ROLEASSIGNMENTS/WRITE"
+| where ActivityStatusValue == "Success"
+| extend
+    principalId = tostring(parse_json(Properties).requestbody.properties.principalId),
+    roleDefinitionId = tostring(parse_json(Properties).requestbody.properties.roleDefinitionId)
+| project TimeGenerated, Caller, principalId, roleDefinitionId, ResourceGroup
+| order by TimeGenerated desc
+```
+
 ## RACI マトリックスに基づくチーム連携
 
 ガバナンスチームは他の CAF チームと以下の役割分担で連携します。
 
 ### 各チームとの連携
 
-| 活動 | ガバナンス | 戦略 | プラットフォーム | ランディングゾーン | ワークロード | セキュリティ |
-|---|---|---|---|---|---|---|
-| ガバナンスポリシー策定 | **R/A** | C | C | I | I | C |
-| セキュリティベースライン定義 | **R/A** | I | C | I | I | **R** |
-| コスト管理・予算策定 | **R/A** | **A** | C | I | C | I |
-| コンプライアンス監視 | **R/A** | I | C | I | I | C |
-| リスクアセスメント | **R/A** | C | C | I | C | C |
-| Azure Policy 実装 | **R** | I | **A** | C | I | C |
-| RBAC 設計 | **R/A** | I | C | C | I | C |
-| Landing Zone 設計レビュー | C | I | **R** | **A** | I | C |
-| ワークロードアーキテクチャレビュー | C | I | I | C | **R/A** | C |
+| 活動 | ガバナンス | 戦略 | プラットフォーム | ランディングゾーン | ワークロード | セキュリティ | CCoE |
+|---|---|---|---|---|---|---|---|
+| ガバナンスポリシー策定 | **R/A** | C | C | I | I | C | C |
+| セキュリティベースライン定義 | **R/A** | I | C | I | I | **R** | C |
+| コスト管理・予算策定 | **R/A** | **A** | C | I | C | I | I |
+| コンプライアンス監視 | **R/A** | I | C | I | I | C | I |
+| リスクアセスメント | **R/A** | C | C | I | C | C | C |
+| Azure Policy 実装 | **R** | I | **A** | C | I | C | I |
+| RBAC 設計 | **R/A** | I | C | C | I | C | I |
+| Landing Zone 設計レビュー | C | I | **R** | **A** | I | C | C |
+| ワークロードアーキテクチャレビュー | C | I | I | C | **R/A** | C | C |
+| 成熟度評価・改善計画 | **R** | C | C | I | I | C | **A** |
 
 > **R** = Responsible（実行責任）, **A** = Accountable（説明責任）, **C** = Consulted（相談先）, **I** = Informed（報告先）
 
@@ -168,6 +317,7 @@ ID・アクセス管理を通じてゼロトラストアーキテクチャを実
 - **ランディングゾーンチーム**: 新規サブスクリプションのガードレール適用を確認する。ベースライン構成の準拠状況をレビューする
 - **ワークロードチーム**: ポリシー違反の原因分析と是正を支援する。例外申請プロセスを明確化する
 - **セキュリティチーム**: セキュリティベースラインの共同策定を行う。インシデント発生時の対応プロセスを連携する
+- **CCoE（@ccoe）**: ガバナンスポリシーの変更を全チームに伝達・調整する。成熟度評価の結果を CCoE ステアリングに報告する。Policy as Code の標準化をプラットフォームチームと連携して推進する
 
 ## 回答時のガイドライン
 
