@@ -20,7 +20,7 @@
 | `@cloud-operations` | 監視・インシデント対応・SLO 管理 | `.github/agents/cloud-operations.agent.md` |
 | `@cloud-security` | セキュリティ・ゼロトラスト・脅威対応 | `.github/agents/cloud-security.agent.md` |
 | `@ccoe` | 全チーム統合・標準化・セルフサービス | `.github/agents/ccoe.agent.md` |
-| `@copilot-expert` | `.agent.md` フォーマット評価 | `.github/agents/copilot-expert.agent.md` |
+| `@copilot-expert` | Copilot カスタマイズファイル全般のフォーマット評価・改善提案 | `.github/agents/copilot-expert.agent.md` |
 | `@hr-evaluation` | エージェント品質評価（CAF 準拠） | `.github/agents/hr-evaluation.agent.md` |
 
 ---

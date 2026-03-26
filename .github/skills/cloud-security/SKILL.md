@@ -1,3 +1,8 @@
+---
+name: cloud-security
+description: クラウドセキュリティ スキル — ゼロトラスト 3 原則、Microsoft Defender for Cloud プラン一覧、Microsoft Sentinel 構成、セキュリティ KQL クエリ集、多層防御チェックリストを提供します。
+---
+
 # Cloud Security スキル
 
 このスキルファイルは `@cloud-security` エージェントが提供する再利用可能な知識・手順を定義します。
