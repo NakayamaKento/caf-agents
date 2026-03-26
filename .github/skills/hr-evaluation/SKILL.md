@@ -1,3 +1,8 @@
+---
+name: hr-evaluation
+description: HR Evaluation スキル — CAF エージェント評価スコアカード（25 点満点）、エージェント種別別 CAF 準拠チェックリスト、改善ロードマップテンプレートを提供します。
+---
+
 # HR Evaluation スキル
 
 このスキルファイルは `@hr-evaluation` エージェントが提供する再利用可能な評価フレームワークを定義します。

@@ -1,11 +1,11 @@
 ---
 name: agent-review
-description: CAF エージェントの品質評価を実施するための標準プロンプトテンプレート
+description: Copilot カスタマイズファイル（5 種類）の品質評価を実施するための標準プロンプト
 ---
 
-# エージェント品質評価プロンプト
+# Copilot カスタマイズファイル品質評価プロンプト
 
-このプロンプトファイルは `.github/agents/` 配下のエージェントを体系的に評価するために使用します。
+このプロンプトファイルは `.github/` 配下のすべての Copilot カスタマイズファイルを体系的に評価するために使用します。
 
 ---
 
@@ -13,9 +13,9 @@ description: CAF エージェントの品質評価を実施するための標準
 
 このプロンプトファイルを使用するには、以下のいずれかの方法を選択してください:
 
-1. **単体評価**: `@copilot-expert` に評価を依頼
+1. **エージェント単体評価**: `@copilot-expert` に評価を依頼
 2. **CAF 準拠評価**: `@hr-evaluation` に評価を依頼
-3. **全エージェント評価**: 以下のプロンプトをそのまま使用
+3. **全ファイル横断評価**: 以下のプロンプトをそのまま使用
 
 ---
 
@@ -96,18 +96,78 @@ description: CAF エージェントの品質評価を実施するための標準
 
 1. 全エージェントに「⚠️ 対応範囲と制約」セクションが追加されているか
 2. 全エージェントに「💬 使用例」セクションが追加されているか
-3. .github/skills/{agent-name}/SKILL.md が作成されているか
+3. .github/skills/{agent-name}/SKILL.md が作成され、name・description の YAML フロントマターを含むか
 4. .github/copilot-instructions.md が作成され、エージェントとの整合性が取れているか
-5. .github/instructions/bicep.instructions.md が作成されているか
-6. .github/instructions/terraform.instructions.md が作成されているか
-7. .github/instructions/policy.instructions.md が作成されているか
+5. .github/instructions/bicep.instructions.md が作成され、applyTo パターンが正しいか
+6. .github/instructions/terraform.instructions.md が作成され、applyTo パターンが正しいか
+7. .github/instructions/policy.instructions.md が作成され、applyTo パターンが正しいか
 
 各項目について改善後のスコアを再評価し、全エージェントが 28/35 以上を達成しているか確認してください。
 ```
 
 ---
 
-## プロンプト 5: 定期レビュー（四半期ごと推奨）
+## プロンプト 5: SKILL.md フロントマター検証
+
+```
+@copilot-expert .github/skills/ 配下の全 SKILL.md ファイルを評価してください。
+
+確認事項:
+1. YAML フロントマターが存在するか（--- で囲まれた冒頭ブロック）
+2. name フィールドが存在し、対応するエージェント名と一致しているか
+3. description フィールドが存在し、スキルの内容を適切に説明しているか（50 文字以上を推奨）
+4. スキルの内容がエージェント本体（.agent.md）の記述と整合しているか
+5. エージェント本体から .github/skills/{agent-name}/SKILL.md への参照リンクがあるか
+
+問題があれば、修正後の YAML フロントマター案を提示してください。
+```
+
+---
+
+## プロンプト 6: .instructions.md applyTo 検証
+
+```
+@copilot-expert .github/instructions/ 配下の全 .instructions.md ファイルを評価してください。
+
+確認事項:
+1. YAML フロントマターに applyTo フィールドが存在するか
+2. applyTo の glob パターンが対象ファイルを正しく網羅しているか
+3. glob パターンが意図せず広すぎる / 狭すぎる範囲を指定していないか
+4. 各ファイルの内容が applyTo の対象ファイル種別に合致しているか
+5. 不足している技術領域（例: Bicep, Terraform, Policy JSON 以外）がないか確認する
+
+問題があれば、修正後の frontmatter と glob パターン案を提示してください。
+```
+
+---
+
+## プロンプト 7: 全 Copilot カスタマイズファイル横断評価
+
+```
+@copilot-expert .github/ 配下のすべての Copilot カスタマイズファイルを横断的に評価してください。
+
+評価対象ファイル種別:
+- .agent.md   : .github/agents/ 配下の全ファイル
+- SKILL.md    : .github/skills/*/SKILL.md の全ファイル
+- copilot-instructions.md : .github/copilot-instructions.md
+- .instructions.md : .github/instructions/*.instructions.md の全ファイル
+- .prompt.md  : .github/prompts/*.prompt.md の全ファイル
+
+横断評価の観点:
+1. ファイル種別ごとの必須フォーマット（YAML フロントマター）の準拠状況
+2. エージェント ↔ SKILL.md の対応関係（全エージェントに対応 SKILL.md が存在するか）
+3. instructions ファイルの applyTo と実際のリポジトリ内ファイル種別の整合性
+4. copilot-instructions.md の記述と各エージェント定義の矛盾がないか
+5. prompt.md の name・description の適切さ
+
+出力フォーマット:
+- 種別ごとのファイル一覧と検証結果（OK/要改善）
+- 不備がある場合の優先度付き改善アクションリスト
+```
+
+---
+
+## プロンプト 8: 定期レビュー（四半期ごと推奨）
 
 ```
 以下の定期レビューを実施してください:
@@ -117,6 +177,7 @@ description: CAF エージェントの品質評価を実施するための標準
 3. Azure CAF の最新アップデート（過去 3 ヶ月）を確認し、エージェントへの反映が必要か確認
 4. 新しい Azure サービス・機能でエージェントの推奨事項に更新が必要なものを列挙
 5. エージェント間の整合性チェック（用語の一貫性、連携先の双方向性）
+6. SKILL.md の内容がエージェント本体と乖離していないか確認
 
 レビュー結果を EVALUATION_REPORT.md に記録し、改善が必要な場合は PR を作成してください。
 ```
@@ -155,9 +216,22 @@ description: CAF エージェントの品質評価を実施するための標準
 | cloud-security | /5 | /5 | /5 | /5 | /5 | /25 |
 | ccoe | /5 | /5 | /5 | /5 | /5 | /25 |
 
+## SKILL.md フロントマター検証結果
+
+| スキルファイル | name | description | 整合性 | 状態 |
+|---|---|---|---|---|
+| ccoe/SKILL.md | OK/NG | OK/NG | OK/NG | ✅/❌ |
+| cloud-governance/SKILL.md | OK/NG | OK/NG | OK/NG | ✅/❌ |
+| cloud-operations/SKILL.md | OK/NG | OK/NG | OK/NG | ✅/❌ |
+| cloud-platform/SKILL.md | OK/NG | OK/NG | OK/NG | ✅/❌ |
+| cloud-security/SKILL.md | OK/NG | OK/NG | OK/NG | ✅/❌ |
+| cloud-strategy/SKILL.md | OK/NG | OK/NG | OK/NG | ✅/❌ |
+| copilot-expert/SKILL.md | OK/NG | OK/NG | OK/NG | ✅/❌ |
+| hr-evaluation/SKILL.md | OK/NG | OK/NG | OK/NG | ✅/❌ |
+
 ## 改善アクション
 
-| 優先度 | アクション | 対象エージェント | 期限 | 状態 |
+| 優先度 | アクション | 対象ファイル | 期限 | 状態 |
 |---|---|---|---|---|
 | 高 | | | | |
 | 中 | | | | |

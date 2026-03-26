@@ -1,3 +1,8 @@
+---
+name: cloud-governance
+description: クラウドガバナンス スキル — ガバナンス 5 分野チェックリスト、推奨 Azure Policy 一覧、RBAC カスタムロールテンプレート、KQL コンプライアンスクエリ集を提供します。
+---
+
 # Cloud Governance スキル
 
 このスキルファイルは `@cloud-governance` エージェントが提供する再利用可能な知識・手順を定義します。

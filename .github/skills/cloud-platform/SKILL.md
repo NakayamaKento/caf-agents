@@ -1,3 +1,8 @@
+---
+name: cloud-platform
+description: クラウドプラットフォーム スキル — Azure Landing Zone 管理グループ階層、Hub-Spoke ネットワーク設計、Bicep/Terraform 構成標準、IaC デプロイチェックリストを提供します。
+---
+
 # Cloud Platform スキル
 
 このスキルファイルは `@cloud-platform` エージェントが提供する再利用可能な知識・手順を定義します。

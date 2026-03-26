@@ -8,7 +8,7 @@
 
 ## 1. エージェント評価結果（copilot-expert フレームワーク、35 点満点）
 
-### 評価前スコア
+### 評価前スコア（初期状態）
 
 | エージェント | フォーマット | description | 最小権限 | バウンダリ | 具体例 | Skills | Instructions | 総合 | 合否 |
 |---|---|---|---|---|---|---|---|---|---|
@@ -28,7 +28,9 @@
 2. **Custom Instructions 活用 (観点 7)**: `.github/copilot-instructions.md` が未作成 → 全員 1/5
 3. **バウンダリ定義 (観点 4)**: 「やらないこと」セクションが明文化されていない → 全員 2/5
 
-### 評価後スコア（本 PR での改善適用後）
+### 評価後スコア（フェーズ 1 改善適用後）
+
+フェーズ 1 で SKILL.md 作成・エージェント更新・instructions 作成を適用:
 
 | エージェント | フォーマット | description | 最小権限 | バウンダリ | 具体例 | Skills | Instructions | 総合 | 合否 |
 |---|---|---|---|---|---|---|---|---|---|
@@ -42,6 +44,16 @@
 | `hr-evaluation` | 4/5 | 5/5 | 3/5 | 3/5 | 3/5 | **4/5** | **4/5** | **26/35** | ❌ |
 
 > `hr-evaluation` は `edit` ツールを評価エージェントに付与している点（観点 3）と、バウンダリ・具体例のカバレッジ（観点 4, 5）に軽微な改善余地が残ります。
+
+### フェーズ 2 追加改善（本 PR で適用）
+
+フェーズ 2 で SKILL.md YAML フロントマター追加・copilot-instructions.md 更新・agent-review.prompt.md 拡張を適用:
+
+| 変更内容 | 対象ファイル | 効果 |
+|---|---|---|
+| YAML フロントマター追加 | 全 8 件の SKILL.md | `name` + `description` フィールドを追加し、GitHub Copilot 正式フォーマットに準拠 |
+| エージェント一覧の説明更新 | `copilot-instructions.md` | `@copilot-expert` の説明を全 5 ファイル種別を対象とする内容に修正 |
+| プロンプト拡張 | `agent-review.prompt.md` | SKILL.md 検証・instructions applyTo 検証・全ファイル横断評価の 3 プロンプトを追加 |
 
 ---
 
@@ -93,22 +105,27 @@
 | `copilot-expert/SKILL.md` | 35 点スコアカード、必須フォーマット、バウンダリ定義テンプレート、使用例テンプレート |
 | `hr-evaluation/SKILL.md` | 25 点スコアカード、エージェント別 CAF チェックリスト、改善ロードマップテンプレート |
 
+> **フェーズ 2 で追加**: 全 8 件の SKILL.md に `name` + `description` の YAML フロントマターを追加。
+
 #### `.github/instructions/` ディレクトリ（3 ファイル）
 
-| インストラクションファイル | 適用対象 | 内容 |
+| インストラクションファイル | applyTo glob パターン | 内容 |
 |---|---|---|
-| `bicep.instructions.md` | `**/*.bicep,**/*.bicepparam` | ファイル構成、必須規則、セキュリティ必須事項、CI/CD パターン |
-| `terraform.instructions.md` | `**/*.tf,**/*.tfvars` | ファイル構成、versions.tf、locals.tf、シークレット管理、AVM 活用 |
-| `policy.instructions.md` | `**/policy/**/*.json` 等 | ポリシー定義構造、効果の段階適用、イニシアティブ構成、テスト方法 |
+| `bicep.instructions.md` | `**/*.bicep,**/*.bicepparam,**/bicepconfig.json` | ファイル構成、必須規則、セキュリティ必須事項、CI/CD パターン |
+| `terraform.instructions.md` | `**/*.tf,**/*.tfvars,**/.terraform.lock.hcl` | ファイル構成、versions.tf、locals.tf、シークレット管理、AVM 活用 |
+| `policy.instructions.md` | `**/policy/**/*.json,**/*policy*.json` 等 | ポリシー定義構造、効果の段階適用、イニシアティブ構成、テスト方法 |
 
 #### `.github/prompts/agent-review.prompt.md`
 
-5 種類の標準評価プロンプトを収録:
+8 種類の標準評価プロンプトを収録（フェーズ 2 で 3 件追加）:
 1. 単体エージェント評価（copilot-expert フレームワーク）
 2. 全エージェント一括評価
 3. CAF 準拠度評価（hr-evaluation フレームワーク）
-4. 改善適用後の確認
-5. 定期レビュー（四半期推奨）
+4. 改善適用後の確認（SKILL.md フロントマター検証を含む）
+5. **[New]** SKILL.md フロントマター検証
+6. **[New]** `.instructions.md` applyTo 検証
+7. **[New]** 全 Copilot カスタマイズファイル横断評価
+8. 定期レビュー（四半期推奨）
 
 ### 3.2 既存エージェントへの追加
 
@@ -263,7 +280,7 @@ tools:
 
 ## 7. ファイル変更サマリー
 
-### 新規作成ファイル（17 ファイル）
+### フェーズ 1: 新規作成ファイル（13 ファイル）
 
 ```
 .github/copilot-instructions.md
@@ -279,10 +296,9 @@ tools:
 .github/instructions/terraform.instructions.md
 .github/instructions/policy.instructions.md
 .github/prompts/agent-review.prompt.md
-COPILOT_FORMAT_IMPROVEMENT.md（本ファイル）
 ```
 
-### 更新ファイル（8 ファイル）
+### フェーズ 1: 更新ファイル（8 ファイル）
 
 ```
 .github/agents/cloud-strategy.agent.md    - バウンダリ定義、使用例、参照スキルを追加
@@ -291,8 +307,21 @@ COPILOT_FORMAT_IMPROVEMENT.md（本ファイル）
 .github/agents/cloud-operations.agent.md  - バウンダリ定義、使用例、参照スキルを追加
 .github/agents/cloud-security.agent.md    - バウンダリ定義、使用例、参照スキルを追加
 .github/agents/ccoe.agent.md              - バウンダリ定義、使用例、参照スキルを追加
-.github/agents/copilot-expert.agent.md    - 参照スキルを追加
+.github/agents/copilot-expert.agent.md    - 全 5 ファイル種別対応に拡張、参照スキルを追加
 .github/agents/hr-evaluation.agent.md     - 参照スキルを追加
+```
+
+### フェーズ 2: 新規作成ファイル（0 ファイル）
+
+フェーズ 2 では新規ファイルの作成はなく、既存ファイルの更新のみ。
+
+### フェーズ 2: 更新ファイル（4 ファイル）
+
+```
+.github/skills/*/SKILL.md（全 8 件）       - name・description の YAML フロントマターを追加
+.github/copilot-instructions.md            - @copilot-expert の説明を全 5 ファイル種別対応に修正
+.github/prompts/agent-review.prompt.md     - SKILL.md 検証・instructions 検証・横断評価プロンプト追加
+COPILOT_FORMAT_IMPROVEMENT.md（本ファイル） - フェーズ 2 の変更内容を反映
 ```
 
 ---
@@ -303,6 +332,7 @@ COPILOT_FORMAT_IMPROVEMENT.md（本ファイル）
 - **フォーマット面の改善のみ**: エージェントの役割・指示内容は変更なし
 - **整合性の確保**: `.github/copilot-instructions.md` のベースラインと各エージェントの指示に矛盾なし
 - **SKILL.md の配置**: `.github/skills/<スキル名>/SKILL.md` の命名規則に準拠
+- **SKILL.md フロントマター**: 全 SKILL.md に `name` と `description` フィールドを含む YAML フロントマターを追加
 
 ---
 

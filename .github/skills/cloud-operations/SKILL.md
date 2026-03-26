@@ -1,3 +1,8 @@
+---
+name: cloud-operations
+description: クラウド運用スキル — Azure Monitor アーキテクチャ、SLI/SLO/エラーバジェット計算、アラート設計パターン、インシデント対応 Runbook、KQL クエリ集を提供します。
+---
+
 # Cloud Operations スキル
 
 このスキルファイルは `@cloud-operations` エージェントが提供する再利用可能な知識・手順を定義します。

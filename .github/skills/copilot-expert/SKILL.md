@@ -1,3 +1,8 @@
+---
+name: copilot-expert
+description: Copilot Expert スキル — .agent.md 評価スコアカード（35 点満点）、ファイル別チェックリスト（SKILL.md・instructions・prompt）、評価出力テンプレートを提供します。
+---
+
 # Copilot Expert スキル
 
 このスキルファイルは `@copilot-expert` エージェントが提供する再利用可能な評価フレームワークを定義します。
