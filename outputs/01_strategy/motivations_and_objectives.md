@@ -1,10 +1,10 @@
 # クラウド導入動機・ミッション・目標定義書
 
 **文書バージョン**: v1.0  
-**作成日**: 2025年1月  
+**作成日**: 2026年3月28日  
 **作成チーム**: クラウド戦略チーム（Cloud Strategy）  
 **CAF フェーズ**: 戦略（Strategy）フェーズ — ステップ 2  
-**レビューサイクル**: 四半期ごと（次回レビュー: 2025年4月）  
+**レビューサイクル**: 四半期ごと（次回レビュー: 2026年6月）  
 **承認者**: CIO / CDO / CFO
 
 ---
@@ -444,7 +444,7 @@ Azure CAF は、クラウド導入の動機を以下の 3 カテゴリに分類�
 
 *本文書は Azure Cloud Adoption Framework（CAF）戦略フェーズのガイダンスに準拠して作成されています。*
 *参考: [Microsoft CAF — Strategy Phase](https://learn.microsoft.com/ja-jp/azure/cloud-adoption-framework/strategy/)*
-*次回レビュー日: 2025年4月（FY2025 Q2 OKR チェックイン）*
+*次回レビュー日: 2026年6月（FY2026 Q3 OKR チェックイン）*
 ---
 
 ## @devils-advocate レビュー対応記録

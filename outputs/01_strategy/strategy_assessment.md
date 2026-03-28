@@ -1,6 +1,6 @@
 # クラウド導入戦略評価レポート
 
-**作成日**: 2025年  
+**作成日**: 2026年3月28日  
 **対象フレームワーク**: Microsoft Azure Cloud Adoption Framework (CAF) – 戦略フェーズ  
 **評価実施チーム**: Cloud Strategy, Cloud Governance, Cloud Platform, Cloud Operations, Cloud Security  
 **文書バージョン**: 1.0  
@@ -704,7 +704,7 @@ Microsoft Defender XDR（Extended Detection and Response）
 
 *本レポートは Azure CAF ガイダンスに基づき Cloud Strategy チームが作成しました。*  
 *定期レビュー推奨サイクル: 四半期ごと*  
-*次回更新予定: 本評価日より 3 ヶ月後*
+*次回更新予定: 2026年6月28日*
 ---
 
 ## @devils-advocate レビュー対応記録
