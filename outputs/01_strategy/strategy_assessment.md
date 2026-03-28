@@ -81,7 +81,7 @@ Azure パブリッククラウドへ段階的に移行する方向性が戦略�
 
 #### TCO 比較分析（5 年間）
 
-以下は Azure Migrate TCO Calculator の推計値に基づく概算です：
+以下は Azure TCO Calculator の推計値に基づく概算です：
 
 | コスト項目 | オンプレミス（5年合計） | Azure クラウド（5年合計） | 削減額 | 削減率 |
 |---|---|---|---|---|
@@ -119,7 +119,7 @@ ROI = (30,800 - 17,000) / 17,000 × 100 = 約 81%
 ```
 
 > **注意**: 本試算は概算であり、実際のコストは組織固有の構成・契約条件によって変動します。
-> 詳細は Azure Migrate TCO Calculator（https://azure.microsoft.com/ja-jp/pricing/tco/calculator/）
+> 詳細は Azure TCO Calculator（https://azure.microsoft.com/ja-jp/pricing/tco/calculator/）
 > を使用して精緻化することを推奨します。全文書で統一している財務前提は本セクション記載の通りです。
 
 ### 2.3 競合優位性分析
@@ -448,7 +448,7 @@ Management Group 階層設計（案）
 | **ID（Identity）** | 従来型（Level 1） | ユーザー ID はオンプレミス AD 管理。MFA は一部のみ適用 | 最適化（Level 3）：条件付きアクセス、パスワードレス認証 |
 | **デバイス（Devices）** | 従来型（Level 1） | デバイス管理ポリシーが未整備。個人デバイスの業務利用（BYOD）が無制限 | 詳細（Level 2）：Microsoft Intune による MDM/MAM |
 | **ネットワーク（Networks）** | 従来型（Level 1） | 境界防御中心。内部ネットワークは暗黙的に信頼 | 詳細（Level 2）：マイクロセグメンテーション、Just-in-Time アクセス |
-| **アプリケーション（Apps）** | 初期段階（Level 1〜2） | 一部アプリで MFA・SSO を導入。API セキュリティが不十分 | 詳細（Level 2）：Defender for Apps、API Management 保護 |
+| **アプリケーション（Apps）** | 初期段階（Level 1〜2） | 一部アプリで MFA・SSO を導入。API セキュリティが不十分 | 詳細（Level 2）：Microsoft Defender for Cloud Apps、API Management 保護 |
 | **データ（Data）** | 従来型（Level 1） | データ分類が未整備。暗号化が一部のシステムのみ | 詳細（Level 2）：Microsoft Purview によるデータ分類・保護 |
 | **インフラ（Infrastructure）** | 従来型（Level 1） | 脆弱性スキャンが定期的でなく、パッチ適用が遅れがち | 詳細（Level 2）：Defender for Cloud による継続的評価 |
 

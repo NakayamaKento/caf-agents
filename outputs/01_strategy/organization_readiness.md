@@ -432,7 +432,7 @@ Wave 4（Month 18-24）: ミッションクリティカルシステム（十分�
 |---|---|---|---|
 | インフラプロビジョニング | 10% | 90% | Azure Bicep / Terraform |
 | OS パッチ適用 | 30%（手動スケジュール） | 90% | Azure Update Manager |
-| セキュリティスキャン | 20% | 95% | Defender for DevSecOps |
+| セキュリティスキャン | 20% | 95% | Microsoft Defender for DevOps |
 | デプロイパイプライン | 25% | 95% | GitHub Actions / Azure DevOps |
 | 監視・アラート設定 | 20% | 95% | Azure Monitor / Bicep テンプレート |
 | コスト管理レポート | 5% | 90% | Azure Cost Management + Power BI |

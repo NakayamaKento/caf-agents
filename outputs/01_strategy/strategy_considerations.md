@@ -547,7 +547,7 @@ Microsoft Responsible AI の 6 原則を組織の AI 活用ポリシーに組み
 | 要件 | 対応方法 | Azure サービス |
 |---|---|---|
 | データ最小化原則 | 学習に必要なデータのみを使用 | Azure Purview（データカタログ） |
-| 目的外利用の禁止 | データ利用目的の明示と同意管理 | Microsoft Purview Consent Management |
+| 目的外利用の禁止 | データ利用目的の明示と同意管理 | Microsoft Priva（同意管理） |
 | 忘れられる権利 | 個人データの特定と削除機能 | Azure Purview Data Map |
 | 説明可能性の確保 | モデルの判断根拠を提示可能に | Azure ML Explainability |
 | データ国外移転制限 | 日本リージョン内でのデータ処理 | Azure Japan East/West の利用 |
@@ -1079,7 +1079,7 @@ Microsoft のコミットメント（活用可能なメリット）:
 組織への直接メリット:
   → Azure 移行だけで IT 領域の CO2 排出を
     オンプレミス比 最大 98% 削減可能
-    （Microsoft の Carbon Benefit Calculator より）
+    （Microsoft の Emissions Impact Dashboard より）
 
 Azure Japan East データセンター:
   → 2024年より 100% 再生可能エネルギー（グリーン電力証書活用）
