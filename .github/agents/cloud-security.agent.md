@@ -355,7 +355,7 @@ AzureActivity
 | **Defender CSPM（有償）** | $0.007/リソース/月 | 全リソース | セキュアスコア 70% 未満の環境では ROI 高 |
 | **Defender for Containers** | $7/vCore/月 | AKS | 本番 Kubernetes 環境では強く推奨 |
 
-> 💡 **価格は参考値です**: 上記コストは概算であり、リージョン・構成・割引契約により変動します。最新の価格は [Azure 公式価格ページ](https://azure.microsoft.com/ja-jp/pricing/details/defender-for-cloud/) を必ず確認してください。
+> 💡 **価格は参考値です（2024 年時点の概算）**: 上記コストはリージョン・構成・割引契約により変動します。価格は頻繁に改定されるため、実際の計画策定時は必ず [Azure 公式価格ページ](https://azure.microsoft.com/ja-jp/pricing/details/defender-for-cloud/) で最新情報を確認してください。
 
 > ⚠️ **楽観的バイアスへの注意**: 全プランを一括有効化する前に、環境規模とリスクプロファイルを考慮してください。小規模環境（<50 リソース）では Defender for Cloud Free Tier + MCSB Audit Policy から開始を検討してください。
 
