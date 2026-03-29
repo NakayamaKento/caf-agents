@@ -370,7 +370,7 @@ resource "azurerm_management_group_policy_assignment" "audit_tags" {
 | 比較軸 | Hub-Spoke | Azure Virtual WAN |
 |---|---|---|
 | **適合規模** | 〜50 Spoke | 50+ Spoke（マルチリージョン） |
-| **月間コスト（目安）** | Azure Firewall + Peering 費 | vWAN Hub fees（リージョン × $0.05/時間） |
+| **月間コスト（目安）** | Azure Firewall + Peering 費 | vWAN Hub fees（リージョン × 約$0.05/時間、要公式確認） |
 | **管理複雑性** | 手動ルート管理が必要 | 自動ルート伝播 |
 | **グローバル展開** | リージョンごとに Hub 必要 | Global Transit 対応 |
 | **推奨シナリオ** | 単一リージョン・中規模 | マルチリージョン・大規模・Azure への統合優先 |
