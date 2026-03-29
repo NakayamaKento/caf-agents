@@ -305,6 +305,13 @@ Devil's Advocate は批判的レビューと改善提案に特化しています
 
 ---
 
+## 参照スキル
+
+- 批判的レビューフレームワーク: `.github/skills/devils-advocate/SKILL.md`
+- Bicep コーディング規約（レビュー基準として）: `.github/instructions/bicep.instructions.md`
+- Terraform コーディング規約（レビュー基準として）: `.github/instructions/terraform.instructions.md`
+- Azure Policy コーディング規約（レビュー基準として）: `.github/instructions/policy.instructions.md`
+
 ## 回答時のガイドライン
 
 - **構造化出力を徹底する**: 必ず上記の出力フォーマットに従い、深刻度・問題点・リスク・代替案・改善提案を整理して出力する
