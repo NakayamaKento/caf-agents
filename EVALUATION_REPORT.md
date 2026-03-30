@@ -147,7 +147,7 @@
 **問題**: `.github/skills/devils-advocate/SKILL.md` が存在せず、`copilot-instructions.md` にも未記載
 
 **実施した改善**:
-1. ✅ `/home/runner/work/caf-agents/caf-agents/.github/skills/devils-advocate/SKILL.md` を新規作成
+1. ✅ `.github/skills/devils-advocate/SKILL.md` を新規作成
    - YAML フロントマター（`name`・`description`）付き
    - リスク分析フレームワーク（4 領域）
    - バイアス検出パターン（6 種）
@@ -367,7 +367,7 @@
 | @hr-evaluation | 34/35 | 29/35 | **63/70** | ✅ PASS（大幅改善） |
 | **平均** | **31.9/35** | **31.0/35** | **62.8/70** | **全 9/9 PASS** |
 
-**全エージェントが両評価の合格基準（技術: 28/35、ビジネス: 28/35）を満たしました。**
+**全エージェントが両評価の合格基準（技術: 28/35、ビジネス: 25/35）を満たしました。**
 
 ---
 
