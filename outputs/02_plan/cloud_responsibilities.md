@@ -979,3 +979,41 @@ Azure の共有責任モデルに基づき、Microsoft と組織の責任を明�
 ---
 
 *本文書は Azure CAF 計画フェーズの成果物として、CCoE の承認を経て確定します。次回レビュー予定: 2026年7月（フェーズ 1 マイルストーン評価時）*
+
+---
+
+## @devils-advocate レビュー記録
+
+**レビュー実施日**: 2026年4月12日  
+**レビュアー**: @devils-advocate  
+**レビュー対象バージョン**: 1.0  
+
+### 指摘事項一覧
+
+| # | 深刻度 | 指摘タイトル | 改善提案の概要 | 解消状況 |
+|---|---|---|---|---|
+| 1 | 🔴 Critical | AI 導入責任が技術的準備度 1.5/5.0 の組織に対して過大（ゲート条件なし） | Gate 1/Gate 2 の前提条件（Landing Zone 完成・Defender 展開）を定義し AI 導入を条件付きにする | ⏳ `adoption_plan.md` で Gate 定義を追加予定 |
+| 2 | 🔴 Critical | PCI DSS v4.0 の維持管理責任（年次レビュー）が RACI から漏れている | @cloud-governance の継続タスクとして追記し ISMAP 対応と同時期のスケジュールを明記する | ⏳ `adoption_plan.md` に持ち越し |
+| 3 | 🟠 High | MSSP との責任境界が未定義 ― P1 インシデント時の「責任の谷間」 | MSSP インシデント対応の RACI を補足し、内部 SLA との整合要件を明記する | ⏳ 外部パートナー選定時に ROB として対処予定 |
+| 4 | 🟠 High | CCoE の構成・権限が未定義のまま Accountable に設定されている | operating_model.md の CCoE 定義への参照を追加し、発足前の暫定対応を明記する | ⏳ `adoption_plan.md` で CCoE 発足手順を記載予定 |
+| 5 | 🟠 High | フェーズ 1 で @cloud-operations に要求される能力が現状成熟度（2.5/5.0）を超えている | フェーズ 1 でのスコープをアラート設定・基本 Runbook 整備に限定し外部パートナー支援を明記する | ⏳ 部分解消（adoption_plan.md でトレーニング計画と紐付け） |
+| 6 | 🟠 High | 責任が SLO 未達のときの対応が未定義（SLO ≠ 責任トリガー） | SLO 未達時のエスカレーションと責任者変更の基準を追記する | ⏳ `adoption_plan.md` に持ち越し |
+| 7 | 🟡 Medium | ガバナンス・セキュリティの Deny ポリシー適用時の既存ワークロードへの影響評価が未記載 | 既存ワークロードへの影響評価プロセスを §2 に追記する | ⏳ 次成果物に持ち越し |
+| 8 | 🟡 Medium | 変更管理 CAB の定足数・意思決定方式が未定義 | CAB 定足数・議決方式・緊急変更ファストトラックを §4 に追記する | ⏳ `adoption_plan.md` に持ち越し |
+
+### 重大指摘の解消状況チェックリスト
+
+- [ ] Critical-1: AI 導入の Gate 1/Gate 2 前提条件が `adoption_plan.md` に定義された
+- [ ] Critical-2: PCI DSS v4.0 年次維持責任が RACI に追記された
+- [ ] High-1: MSSP との P1 インシデント対応 RACI 補足が契約要件として文書化された
+- [ ] High-2: CCoE Accountable の発足前暫定対応が明記された
+- [ ] High-3: フェーズ 1 の @cloud-operations スコープが現成熟度に合わせて調整された
+- [ ] High-4: SLO 未達時のエスカレーション基準が `adoption_plan.md` に記載された
+
+### `adoption_plan.md` への持ち越し事項
+
+1. AI 導入の Gate 1/Gate 2 前提条件の詳細定義（Critical-1）
+2. PCI DSS v4.0 年次維持責任の RACI への追記（Critical-2）
+3. フェーズ移行時の SLO エスカレーション基準（High-4）
+4. Change Management プログラムとトレーニング計画（High-3 に関連）
+5. CCoE 発足手順・暫定対応期間の定義（High-2）
