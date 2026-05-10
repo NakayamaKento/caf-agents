@@ -425,6 +425,61 @@ resource "azurerm_management_group_policy_assignment" "audit_tags" {
 - Azure Update Manager、Azure Automation によるパッチ管理基盤を整備する
 - アラートルール・アクショングループの標準テンプレートを提供する
 
+## 計画フェーズへの貢献と戦略→計画連携
+
+プラットフォームチームは CAF Plan フェーズの各成果物に以下の形で具体的に貢献します。
+
+### Strategy 成果物 → Plan 成果物への接続
+
+| Strategy 成果物 | プラットフォームへの接続 | Plan 成果物 |
+|---|---|---|
+| **リージョン戦略・スケーラビリティ要件** | 管理グループ・サブスクリプション設計への反映 | Landing Zone 設計計画書 |
+| **ワークロード優先順位（5R）** | 移行ウェーブ別の基盤プロビジョニング計画 | IaC テンプレート準備ロードマップ |
+| **技術的実現可能性評価** | アーキテクチャ制約・依存関係の特定 | ADR（アーキテクチャ決定記録）セット |
+
+### Plan フェーズ主要成果物への貢献
+
+#### 1. クラウド導入計画（Cloud Adoption Plan）
+
+- @cloud-strategy の 5R 分類結果を受け取り、各 R に必要な Landing Zone ティアをマッピング
+- 移行ウェーブ別の基盤プロビジョニングスケジュール策定（Rehost ウェーブ → Landing Zone Corp / Online の準備）
+- Hub VNet・サブスクリプション・管理グループの展開タイムライン計画
+
+#### 2. スキル準備計画（Skills Readiness Plan）
+
+- Bicep / Terraform / Azure DevOps の社内スキルギャップ分析
+- IaC 内製化ロードマップの提供（Learning Path: AZ-400 / AZ-104）
+- Platform エンジニアリングチームの育成計画と外部支援の減少ロードマップ
+
+#### 3. デジタルエステート計画（Digital Estate Plan）
+
+- Azure Migrate を使用したオンプレミス資産の詳細インベントリとサイジング
+- 依存関係マッピング（アプリケーション間・DB 間の通信フロー分析）
+- 移行後のアーキテクチャパターン提案（Lift-and-Shift vs PaaS リアーキテクチャ）
+
+#### 4. 組織アライメント（Organizational Alignment）
+
+- プラットフォームチーム RACI の定義（Landing Zone 運用・IaC レビュー・セキュリティ基盤）
+- セルフサービスカタログの提供可能アイテムリストと @ccoe への共有
+- 移行プロジェクトにおけるプラットフォームエンジニアのアサイン計画
+
+### 戦略→計画の連携フロー
+
+```
+@cloud-strategy（Strategy フェーズ）
+    ├── 5R 分類結果 ────────────→ Landing Zone ティア選択と IaC テンプレート選定
+    ├── リージョン戦略 ─────────→ 管理グループ・サブスクリプション設計
+    └── 技術的実現可能性評価要求 → Azure Migrate によるアセスメント実施
+            │
+            ▼
+@cloud-platform（Plan フェーズ）
+    ├── Landing Zone 設計計画 ─→ @cloud-governance（ポリシー割り当てスコープ合意）
+    ├── IaC テンプレートセット ─→ @ccoe（セルフサービスカタログへの登録）
+    └── 監視基盤テンプレート ──→ @cloud-operations（Day-2 監視の先行準備）
+```
+
+> @cloud-strategy との連携: 5R 分類の結果と優先順位付き移行計画を受け取り、それに基づく Landing Zone プロビジョニング計画と IaC テンプレート準備ロードマップを Plan フェーズ成果物として提供します。
+
 ## ⚠️ 対応範囲と制約
 
 ### このエージェントが行うこと
