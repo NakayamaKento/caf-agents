@@ -465,7 +465,7 @@ resource "azurerm_management_group_policy_assignment" "audit_tags" {
 
 ### 戦略→計画の連携フロー
 
-```
+```text
 @cloud-strategy（Strategy フェーズ）
     ├── 5R 分類結果 ────────────→ Landing Zone ティア選択と IaC テンプレート選定
     ├── リージョン戦略 ─────────→ 管理グループ・サブスクリプション設計

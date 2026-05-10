@@ -447,7 +447,7 @@ AzureActivity
 
 ### 戦略→計画の連携フロー
 
-```
+```text
 @cloud-strategy（Strategy フェーズ）
     ├── データ分類基準 ──────────→ セキュリティコントロールレベルの決定
     ├── コンプライアンス優先順位 → Defender/Sentinel の有効化スコープ確定
