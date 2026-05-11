@@ -1,0 +1,77 @@
+name: Bicep Validate
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'bicep/**'
+      - '.github/workflows/bicep-validate.yml'
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+env:
+  AZURE_LOCATION: japaneast
+
+jobs:
+  validate:
+    name: Bicep Build & What-If
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Install Bicep CLI
+        run: az bicep install
+
+      - name: Bicep Build (構文チェック)
+        run: az bicep build --file bicep/main.bicep
+
+      - name: Bicep What-If (変更プレビュー)
+        id: whatif
+        run: |
+          ORG_PREFIX="${{ vars.ORG_PREFIX }}"
+          if [ -z "$ORG_PREFIX" ]; then
+            echo "::error::ORG_PREFIX variable is not set. Please configure it in the repository or environment variables."
+            exit 1
+          fi
+          OUTPUT=$(az deployment sub what-if \
+            --location ${{ env.AZURE_LOCATION }} \
+            --template-file bicep/main.bicep \
+            --parameters environmentName=dev \
+                         orgPrefix="$ORG_PREFIX" \
+                         managementGroupRootId=${{ vars.MANAGEMENT_GROUP_ROOT_ID }} \
+            --no-prompt 2>&1)
+          echo "$OUTPUT"
+          echo "whatif_output<<EOF" >> $GITHUB_OUTPUT
+          echo "$OUTPUT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: PR コメント（What-If 結果）
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const output = `## Bicep What-If 結果 🔍
+            \`\`\`
+            ${{ steps.whatif.outputs.whatif_output }}
+            \`\`\`
+            *Workflow: \`${{ github.workflow }}\` | Run: \`${{ github.run_id }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });
