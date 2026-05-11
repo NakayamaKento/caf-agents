@@ -1,6 +1,6 @@
 ---
 name: hr-evaluation
-description: HR Evaluation スキル — CAF エージェント評価スコアカード（45 点満点）と Copilot Expert との統合スコア（/80）、エージェント種別別 CAF 準拠チェックリスト、改善ロードマップテンプレートを提供します。
+description: HR Evaluation スキル — CAF エージェント評価スコアカード（45 点満点）と Copilot Expert との統合スコア（/80）、各エージェント向け CAF 準拠チェックリスト、改善ロードマップテンプレートを提供します。
 ---
 
 # HR Evaluation スキル
