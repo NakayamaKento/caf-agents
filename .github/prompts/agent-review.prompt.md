@@ -69,7 +69,7 @@ description: Copilot カスタマイズファイル（5 種類）の品質評価
 
 ---
 
-## プロンプト 3: CAF 準拠度評価（hr-evaluation フレームワーク）
+## プロンプト 3: CAF 準拠評価 + 統合スコア算定（hr-evaluation フレームワーク）
 
 ```
 @hr-evaluation .github/agents/ 配下の全エージェントを一括評価してください。
@@ -81,12 +81,13 @@ description: Copilot カスタマイズファイル（5 種類）の品質評価
 4. 他エージェントとの連携（RACI、双方向の連携定義）
 5. セキュリティ考慮（最小権限、暗号化、監査ログ）
 6. 批判的思考力（リスク分析、代替案、フォールバック戦略）
-7. 戦略フェーズへの貢献度（動機定義、ビジネスケース、5R）
-8. 計画フェーズへの貢献度（導入計画、スキル準備、デジタルエステート計画）
-9. 戦略→計画の連携度（成果物参照、トレーサビリティ、フェーズ間整合性）
+7. フェーズ貢献度（Strategy / Plan / Ready / Adopt への寄与）
+8. 準備フェーズへの貢献度（Landing Zone のスコープ確定、手戻りしにくい決定の早期検出）
+9. IaC 品質への貢献度（Bicep の命名・パラメータ設計・モジュール分割、AVM Pattern Modules、Azure Policy Effect 選択）
 
 以下を含む評価レポートを作成してください:
 - スコア比較テーブル
+- Copilot Expert（35 点満点）と HR Evaluation（45 点満点）を合算した統合スコア `/80`（45 + 35 = 80）
 - 優先度付き改善アクション
 - 組織全体の改善ロードマップ（即時・短期・中期）
 ```
@@ -177,11 +178,12 @@ description: Copilot カスタマイズファイル（5 種類）の品質評価
 以下の定期レビューを実施してください:
 
 1. @copilot-expert で全エージェントのスコアを再評価（35 点満点）
-2. @hr-evaluation で CAF 準拠度を再評価（45 点満点）
-3. Azure CAF の最新アップデート（過去 3 ヶ月）を確認し、エージェントへの反映が必要か確認
-4. 新しい Azure サービス・機能でエージェントの推奨事項に更新が必要なものを列挙
-5. エージェント間の整合性チェック（用語の一貫性、連携先の双方向性）
-6. SKILL.md の内容がエージェント本体と乖離していないか確認
+2. @hr-evaluation で 9 観点を再評価（45 点満点）
+3. Copilot Expert（35 点満点）と合算した統合スコア `/80` を更新
+4. Azure CAF の最新アップデート（過去 3 ヶ月）を確認し、エージェントへの反映が必要か確認
+5. 新しい Azure サービス・機能でエージェントの推奨事項に更新が必要なものを列挙
+6. エージェント間の整合性チェック（用語の一貫性、連携先の双方向性）
+7. SKILL.md の内容がエージェント本体と乖離していないか確認
 
 レビュー結果を EVALUATION_REPORT.md に記録し、改善が必要な場合は PR を作成してください。
 ```
@@ -208,10 +210,13 @@ description: Copilot カスタマイズファイル（5 種類）の品質評価
 | cloud-operations | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /35 |
 | cloud-security | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /35 |
 | ccoe | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /35 |
+| copilot-expert | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /35 |
+| devils-advocate | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /35 |
+| hr-evaluation | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /35 |
 
 ## hr-evaluation フレームワーク（45 点満点）
 
-| エージェント | CAF 準拠 | 役割明確さ | 実用性 | 連携 | セキュリティ | 批判的思考 | 戦略貢献 | 計画貢献 | 戦略→計画 | 総合 |
+| エージェント | CAF 準拠 | 役割明確さ | 実用性 | 連携 | セキュリティ | 批判的思考 | フェーズ貢献 | 準備フェーズ | IaC 品質 | HR 総合 |
 |---|---|---|---|---|---|---|---|---|---|---|
 | cloud-strategy | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /45 |
 | cloud-governance | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /45 |
@@ -219,6 +224,23 @@ description: Copilot カスタマイズファイル（5 種類）の品質評価
 | cloud-operations | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /45 |
 | cloud-security | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /45 |
 | ccoe | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /45 |
+| copilot-expert | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /45 |
+| devils-advocate | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /45 |
+| hr-evaluation | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /5 | /45 |
+
+## 統合評価（/80）
+
+| エージェント | Copilot Expert | HR Evaluation | 統合スコア |
+|---|---|---|---|
+| cloud-strategy | /35 | /45 | /80 |
+| cloud-governance | /35 | /45 | /80 |
+| cloud-platform | /35 | /45 | /80 |
+| cloud-operations | /35 | /45 | /80 |
+| cloud-security | /35 | /45 | /80 |
+| ccoe | /35 | /45 | /80 |
+| copilot-expert | /35 | /45 | /80 |
+| devils-advocate | /35 | /45 | /80 |
+| hr-evaluation | /35 | /45 | /80 |
 
 ## SKILL.md フロントマター検証結果
 
@@ -231,6 +253,7 @@ description: Copilot カスタマイズファイル（5 種類）の品質評価
 | cloud-security/SKILL.md | OK/NG | OK/NG | OK/NG | ✅/❌ |
 | cloud-strategy/SKILL.md | OK/NG | OK/NG | OK/NG | ✅/❌ |
 | copilot-expert/SKILL.md | OK/NG | OK/NG | OK/NG | ✅/❌ |
+| devils-advocate/SKILL.md | OK/NG | OK/NG | OK/NG | ✅/❌ |
 | hr-evaluation/SKILL.md | OK/NG | OK/NG | OK/NG | ✅/❌ |
 
 ## 改善アクション
